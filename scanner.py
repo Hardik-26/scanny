@@ -68,7 +68,7 @@ $image.SaveFile("'''+ str(Path)+'\\'+str(ImageName)+'.png'+'"'+')'
     powershell_file.close()
     process = subprocess.Popen('powershell.exe -ExecutionPolicy RemoteSigned -file "scanner.ps1"', stdout= subprocess.PIPE) # Execute Powershell file
     process.communicate()
-    #os.remove('scanner.ps1')
+    os.remove('scanner.ps1')
 
 #|================================================================================================================================================================================|
 
