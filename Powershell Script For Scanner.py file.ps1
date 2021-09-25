@@ -15,4 +15,4 @@ if($image.FormatID -ne $wiaFormatPNG)
     $image = $imageProcess.Apply($image)
 }
 
-$image.SaveFile("C:\Users\denni\Desktop\auauau.png")
+$image.SaveFile("C:\Users\Admin\Desktop\TestImage.png")
