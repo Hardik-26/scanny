@@ -69,3 +69,24 @@ $image.SaveFile("'''+ str(Path)+'\\'+str(ImageName)+'.png'+'"'+')'
     os.remove('scanner.ps1')
 
 #|================================================================================================================================================================================|
+
+
+# Get size of the scanner bed----------------------------
+
+def size():
+
+    # IMPORTS------------------
+    import subprocess
+    import os
+    from PIL import Image
+    #------------------------------
+    path= os.curdir
+    StartScan(path,'TEMP')    # scan a temp image
+    with Image.open("TEMP.png") as img:   # open image using PIL
+        width,height= img.size # get image size
+    os.remove('TEMP.png')
+    print(width,'px',',',height,'px')
+
+#|==============================================================================================
+    
+    
