@@ -1,7 +1,5 @@
 # Flatbed-Scanner
 
-## [INSTALL PACKAGE](https://test.pypi.org/project/HardikS/): pip install -i https&#58;//<i></i>test.pypi.org/simple/ HardikS 
-
 
 ---------------------------------------------------------------------------------------------------
    #### Module for Python. This Module will enable a user to use any flatbed scanner using python.
@@ -23,7 +21,8 @@ well thats it.
 ## HOW TO USE-
     ‎>>> import scanner                                                   
     ‎>>> scanner.StartScan("Path"( where you want your image file to be saved) , "ImageName" )                     
-    ‎>>> Ex- scanner.StartScan('C:\Users\\Admin\\Desktop','TestIamge')                
+    ‎>>> Ex- scanner.StartScan('C:\Users\\Admin\\Desktop','TestIamge') 
+    ‎>>> scanner.size() # Returns Size of your flatbed scanner
 
 
 
