@@ -24,9 +24,15 @@
 #|==============================================================================================
 
 
+# PRE REQUSITS--------------------------------------------------
+_=False #To check if scanner is calibrated or not
+Printer_Pixel_Data={}
+#|--------------------------------------------------------------------
+
+
 # CALIBRATE SCANNER------------------------------------------
 def Calibrate():
-
+    _=True #To check if scanner is calibrated or not
     # IMPORTS------------------
     import os
     import numpy as np
@@ -131,6 +137,13 @@ def size():
 # Get mesurements of scanned objects--------------------------
 
 def getlength():
+    
+    if _==False:    #To check if scanner is calibrated or not
+        print(' You need to calibrate your scanner for this process')
+        print('\n Follow the calibration process in README.md to calibrate your scanner.\n')
+    else:
+        pass
+    
     # IMPORTS------------------
     import os
     import numpy as np
@@ -142,6 +155,7 @@ def getlength():
         print(' Please Install Open-cv2 -> "pip install opencv-python"')
         print(error)
     #------------------------------
+    
     
     
    #
