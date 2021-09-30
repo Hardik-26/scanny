@@ -50,7 +50,7 @@ def Calibrate():
     edges = cv2.Canny(image, 400, 650)
     # detect lines in the image using hough lines technique-----
     lines = cv2.HoughLinesP(edges, 1, np.pi/180, 10, np.array([]), 500, 50)
-    line_length= abs(((lines[0])[0])[1]-((lines[0])[0])[3])  #---- I can explain this line in comments,
+    line_length= abs(((lines[0])[0])[1]-((lines[0])[0])[3])  #---- I can't explain this line in comments,
                                                                                   #---if you dont understand this line then mail me @dennishardik.2673@gmail.com
                                                                                   #---i will try to explain it to you. ☺
     #print(line_length)
