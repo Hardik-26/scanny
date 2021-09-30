@@ -1,3 +1,4 @@
+# Hinding Console-->
 #-------------------------------------------------------------------
 Add-Type -Name Window -Namespace Console -MemberDefinition '
 
@@ -18,9 +19,11 @@ Hide-Console
 
 #-------------------------------------------------------------------
 
+# Selecting device using WIA--->                           # WIA- "Windows Image Acquisition"
 $deviceManager = new-object -ComObject WIA.DeviceManager
 $device = $deviceManager.DeviceInfos.Item(1).Connect()    
 
+#Png format--->
 $wiaFormatPNG = "{B96B3CAF-0728-11D3-9D7B-0000F81EF32E}"
 
 foreach ($item in $device.Items) { 
@@ -35,4 +38,5 @@ if($image.FormatID -ne $wiaFormatPNG)
     $image = $imageProcess.Apply($image)
 }
 
+#Saving Image--------> # .png file only
 $image.SaveFile("C:\Users\Admin\Desktop\TestImage.png")
