@@ -1,6 +1,6 @@
-#|==============================================================================================================================================================================|
-#|                                                                         Scanner Module                                                                                       |                                                                                        |
-#|==============================================================================================================================================================================|
+#|==============================================================================================
+#|                                                                                         Scanner Module                                                                                                         |
+#|==============================================================================================
 
 # Module By : Hardik Shah.
 
@@ -21,9 +21,48 @@
 #
 # THANK YOU
 #|---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#|==============================================================================================
 
 
-# Scanning-----------------------------------------------------------------------------------------
+# CALIBRATE SCANNER------------------------------------------
+def Calibrate():
+
+    # IMPORTS------------------
+    import os
+    import numpy as np
+    import matplotlib.pyplot as plt
+    try:
+        import cv2
+    except ModuleNotFoundError as error:
+        print(' This Process Requires Open-cv2.')
+        print(' Please Install Open-cv2 -> "pip install opencv-python"')
+        print(error)
+    #------------------------------
+
+    # Start Scan--------
+    path= os.curdir
+    StartScan(path,'TEMP')
+    # Read Image-------
+    image = cv2.imread("TEMP.png")
+    # convert to grayscale--------
+    #grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # perform edge detection---------
+    edges = cv2.Canny(image, 400, 650)
+    # detect lines in the image using hough lines technique-----
+    lines = cv2.HoughLinesP(edges, 1, np.pi/180, 10, np.array([]), 500, 50)
+    line_length= abs(((lines[0])[0])[1]-((lines[0])[0])[3])  #---- I can explain this line in comments,
+                                                                                  #---if you dont understand this line then mail me @dennishardik.2673@gmail.com
+                                                                                  #---i will try to explain it to you. ☺
+    #print(line_length)
+
+    global pixel_len
+    pixel_len=5/line_lenght
+    print(' CALIBRTION COMPLETE')
+
+#|==============================================================================================
+
+
+# Start Scanning-----------------------------------------------------------------------------------------
 
 def StartScan(Path,ImageName):
 
@@ -68,8 +107,8 @@ $image.SaveFile("'''+ str(Path)+'\\'+str(ImageName)+'.png'+'"'+')'
     process.communicate()
     os.remove('scanner.ps1')
 
-#|================================================================================================================================================================================|
 
+#|==============================================================================================
 
 # Get size of the scanner bed----------------------------
 
@@ -87,45 +126,8 @@ def size():
     os.remove('TEMP.png')
     print(width,'px',',',height,'px')
 
-#|================================================================================================================================================================================|
+#|==============================================================================================
 
-
-# CALIBRATE SCANNER------------------------------------------
-
-def Calibrate():
-
-    # IMPORTS------------------
-    import os
-    import numpy as np
-    import matplotlib.pyplot as plt
-    try:
-        import cv2
-    except ModuleNotFoundError as error:
-        print(' This Process Requires Open-cv2.')
-        print(' Please Install Open-cv2 -> "pip install opencv-python"')
-        print(error)
-    #------------------------------
-
-    # Start Scan--------
-    path= os.curdir
-    StartScan(path,'TEMP')
-    # Read Image-------
-    image = cv2.imread("TEMP.png")
-    # convert to grayscale--------
-    #grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    # perform edge detection---------
-    edges = cv2.Canny(image, 400, 650)
-    # detect lines in the image using hough lines technique-----
-    lines = cv2.HoughLinesP(edges, 1, np.pi/180, 10, np.array([]), 500, 50)
-    line_length= abs(((lines[0])[0])[1]-((lines[0])[0])[3])  #---- I can explain this line in comments,
-                                                                                  #---if you dont understand this line then mail me @dennishardik.2673@gmail.com
-                                                                                  #---i will try to explain it to you. ☺
-    pixel_len=5/line_lenght
-    return pixel_len # Now we know how many cm is one pixel in our scanner.
-
-#|================================================================================================================================================================================|
-    
-    
 # Get mesurements of scanned objects--------------------------
 
 def getlength():
@@ -140,3 +142,6 @@ def getlength():
         print(' Please Install Open-cv2 -> "pip install opencv-python"')
         print(error)
     #------------------------------
+    
+    
+   #
