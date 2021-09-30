@@ -126,3 +126,17 @@ def Calibrate():
 #|================================================================================================================================================================================|
     
     
+# Get mesurements of scanned objects--------------------------
+
+def getlength():
+    # IMPORTS------------------
+    import os
+    import numpy as np
+    import matplotlib.pyplot as plt
+    try:
+        import cv2
+    except ModuleNotFoundError as error:
+        print(' This Process Requires Open-cv2.')
+        print(' Please Install Open-cv2 -> "pip install opencv-python"')
+        print(error)
+    #------------------------------
