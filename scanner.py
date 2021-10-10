@@ -2,16 +2,16 @@
 #|                                                                                         Scanner Module                                                                                                         |
 #|==============================================================================================
 
-# Module By : Hardik Shah.
+# Author : Hardik Shah.
+# GitHub : https://github.com/Hardik-26
 
 #|---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # With this module you will be able to use your flatbed scanner using python.
 # This module uses PowerShell script to execute the scan command.
-# you can say that this module works as an API for Powershell.
+# you can say that this module works as an API for Powershell which can comunicate with the scanner using WIA (Windows Image Acquisition).
 #
 # INSTRUCTIONS-
 # Make sure your flatbed scanner is pluged in and ready to scan
-# Change the Execution Policy in Powershell for your computer.
 # well thats it.
 #
 # HOW TO USE-
@@ -24,46 +24,40 @@
 #|==============================================================================================
 
 
-# PRE REQUSITS--------------------------------------------------
+# PRE-REQUISITES--------------------------------------------------
 _=False #To check if scanner is calibrated or not
 Printer_Pixel_Data={}
 #|--------------------------------------------------------------------
 
-
+#|==============================================================================================
 # CALIBRATE SCANNER------------------------------------------
 def Calibrate():
-    _=True #To check if scanner is calibrated or not
-    # IMPORTS------------------
-    import os
-    import numpy as np
-    import matplotlib.pyplot as plt
-    try:
-        import cv2
-    except ModuleNotFoundError as error:
-        print(' This Process Requires Open-cv2.')
-        print(' Please Install Open-cv2 -> "pip install opencv-python"')
-        print(error)
-    #------------------------------
-
-    # Start Scan--------
-    path= os.curdir
-    StartScan(path,'TEMP')
-    # Read Image-------
-    image = cv2.imread("TEMP.png")
-    # convert to grayscale--------
-    #grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    # perform edge detection---------
-    edges = cv2.Canny(image, 400, 650)
-    # detect lines in the image using hough lines technique-----
-    lines = cv2.HoughLinesP(edges, 1, np.pi/180, 10, np.array([]), 500, 50)
-    line_length= abs(((lines[0])[0])[1]-((lines[0])[0])[3])  #---- I can't explain this line in comments,
-                                                                                  #---if you dont understand this line then mail me @dennishardik.2673@gmail.com
-                                                                                  #---i will try to explain it to you. ☺
-    #print(line_length)
-
-    global pixel_len
-    pixel_len=5/line_lenght
-    print(' CALIBRTION COMPLETE')
+    def start():
+        _=True #To check if scanner is calibrated or not
+        # IMPORTS------------------
+        import os
+        from PIL import Image 
+        #------------------------------
+        # Start Scan--------
+        path= os.curdir
+        StartScan(path,'TEMP')
+        # Read Image-------
+        with Image.open("TEMP.png") as img:
+            dpi=round((img.info['dpi'])[1])
+        global pixel_len
+        pixel_len=2.54/dpi  #Length of one pixel in cm
+        #os.remove('TEMP.png')
+        print(' CALIBRTION COMPLETE')
+        return pixel_len
+    if _==True:
+        print('!! RECALIBRATION WILL DELETE THE DAT FROM THE PREVIOUS CALIBRTION !!')
+        choice=input('Do you want to proceed? (y/n) : ')
+        if choice=='y' or 'Y':
+            start()
+        else:
+            pass
+    else:
+        start()
 
 #|==============================================================================================
 
@@ -83,7 +77,22 @@ def StartScan(Path,ImageName):
         pass
 
     #POWERSHELL SCRIPT ---------------------------------------------------------------------------
-    Powershell_code='''$deviceManager = new-object -ComObject WIA.DeviceManager
+    Powershell_code='''# .Net methods for hiding/showing the console in the background
+Add-Type -Name Window -Namespace Console -MemberDefinition '
+[DllImport("Kernel32.dll")]
+public static extern IntPtr GetConsoleWindow();
+
+[DllImport("user32.dll")]
+public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
+'
+function Hide-Console
+{
+    $consolePtr = [Console.Window]::GetConsoleWindow()
+    #0 hide
+    [Console.Window]::ShowWindow($consolePtr, 0)
+}
+Hide-Console
+$deviceManager = new-object -ComObject WIA.DeviceManager
 $device = $deviceManager.DeviceInfos.Item(1).Connect()    
 
 $wiaFormatPNG = "{B96B3CAF-0728-11D3-9D7B-0000F81EF32E}"
@@ -119,19 +128,25 @@ $image.SaveFile("'''+ str(Path)+'\\'+str(ImageName)+'.png'+'"'+')'
 # Get size of the scanner bed----------------------------
 
 def size():
-
     # IMPORTS------------------
     import subprocess
     import os
     from PIL import Image
     #------------------------------
-    path= os.curdir
-    StartScan(path,'TEMP')    # scan a temp image
-    with Image.open("TEMP.png") as img:   # open image using PIL
-        width,height= img.size # get image size
-    os.remove('TEMP.png')
+    if _==True: #To check if scanner is calibrated or not
+        with Image.open("TEMP.png") as img:   # open image using PIL
+            width,height= img.size # get image size
+            dpi=round((img.info['dpi'])[1]) #Get DPI
+        os.remove('TEMP.png')
+    else:
+        path= os.curdir
+        StartScan(path,'TEMP')    # scan a temp image
+        with Image.open("TEMP.png") as img:   # open image using PIL
+            width,height= img.size # get image size
+            dpi=round((img.info['dpi'])[1]) #Get DPI
+        os.remove('TEMP.png')
     print(width,'px',',',height,'px')
-
+    print(width/dpi,'in',',',height/dpi,'in')
 #|==============================================================================================
 
 # Get mesurements of scanned objects--------------------------
@@ -154,6 +169,7 @@ def getlength():
         print(' This Process Requires Open-cv2.')
         print(' Please Install Open-cv2 -> "pip install opencv-python"')
         print(error)
-    #------------------------------
+    #-----------------------------
+
     
-   #
+ #
