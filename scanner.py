@@ -150,8 +150,7 @@ def size():
 
 # Get mesurements of scanned objects--------------------------
 
-def getlength():
-    
+def MeasureObject(ImagePath):
     if _==False:    #To check if scanner is calibrated or not
         print(' You need to calibrate your scanner for this process')
         print('\n Follow the calibration process in README.md to calibrate your scanner.\n')
@@ -169,6 +168,18 @@ def getlength():
         print(' Please Install Open-cv2 -> "pip install opencv-python"')
         print(error)
     #-----------------------------
-
+    image = cv2.imread(ImagePath)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    blur = cv2.GaussianBlur(gray, (5,5), 0)
+    thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+    x,y,w,h = cv2.boundingRect(thresh)  # get cordinates for object
+    cv2.rectangle(image, (x, y), (x + w, y + h), (36,255,12), 2) #Draw Box Aroung Object
+    width=w*pixel_len #Converting pixels to cm
+    height=h*pixel_len #Converting pixels to cm
+    cv2.putText(image, "Width={}cm,Height={}cm".format(round(width,1),round(height,1)),
+                      (round(w/2)-50,y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,0), 2)
+    cv2.imshow("image", image)
+    cv2.waitKey(0)
+#|================================================================================================================================================================================
     
  #
