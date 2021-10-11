@@ -28,7 +28,7 @@
 _=False #To check if scanner is calibrated or not
 #|----------------------------------------------------------------
 
-#|================================================================================================================================================================================
+#|==============================================================================================
 # CALIBRATE SCANNER------------------------------------------
 def Calibrate():
     def start():
@@ -59,7 +59,7 @@ def Calibrate():
     else:
         start()
 
-#|================================================================================================================================================================================
+#|==============================================================================================
 
 # Start Scanning-----------------------------------------------------------------------------------------
 
@@ -122,7 +122,7 @@ $image.SaveFile("'''+ str(Path)+'\\'+str(ImageName)+'.png'+'"'+')'
     os.remove('scanner.ps1')
 
 
-#|================================================================================================================================================================================
+#|==============================================================================================
 
 # Get size of the scanner bed----------------------------
 
@@ -146,14 +146,14 @@ def size():
         os.remove('TEMP.png')
     print(width,'px',',',height,'px')
     print(width/dpi,'in',',',height/dpi,'in')
-#|================================================================================================================================================================================
+#|==============================================================================================
 
 # Get mesurements of scanned objects--------------------------
 
 def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and mesure that.'):
     if _==False:    #To check if scanner is calibrated or not
         print(' You need to calibrate your scanner for this process')
-        print('\n Follow the calibration process in README.md to calibrate your scanner.\n')
+        raise SystemError(' Use "scanner.Calibarate()" to calibrate Scanner')
     else:
         pass
     
@@ -161,6 +161,7 @@ def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and
     import os
     import numpy as np
     import matplotlib.pyplot as plt
+    from PIL import Image
     try:
         import cv2
     except ModuleNotFoundError as error:
@@ -178,14 +179,24 @@ def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and
         cv2.rectangle(image, (x, y), (x + w, y + h), (36,255,12), 2) #Draw Box Aroung Object
         width=w*pixel_len #Converting pixels to cm
         height=h*pixel_len #Converting pixels to cm
-        cv2.putText(image, "Width={}cm,Height={}cm".format(round(width,1),round(height,1)),
+        if Temp==True: #checking If image was resized or not
+            cv2.putText(image, "Width={}cm,Height={}cm".format(round(width,1)*4,round(height,1)*4), #if image resized then w*4 & h*4
                           (round(w/2)-50,y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,0), 2)
+        else:
+            cv2.putText(image, "Width={}cm,Height={}cm".format(round(width,1)*4,round(height,1)*4),
+                              (round(w/2)-50,y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,0), 2)
         cv2.imshow("image", image)
         cv2.waitKey(0)
 #-------------------------------------------------------------------------------------------------------------
-    if ImagePath=='':
+
+    if ImagePath=='':       #To check if to scan or not
+        Temp = True #To checking If image was resized or not
         StartScan(Home_path,'Image')
-        Measure(Home_path+'\Image.png')
+        with Image.open(r'C:\Users\denni\Desktop\Image.png') as img:
+            image = img.resize((round(img.width/4), round(img.height/4)), Image.ANTIALIAS) #Resizing Image to Fit in CV2
+            img.save(Home_path+'\ResizedImage.png')
+        Measure(Home_path+'\ResizedImage.png')
+        os.remove(Home_path+'\ResizedImage.png')
     else:
             if os.path.exists(ImagePath)==False:
                 raise OSError(" Path Not Found / Path Does Not Exist ")
