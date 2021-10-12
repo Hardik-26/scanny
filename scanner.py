@@ -173,7 +173,7 @@ def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and
     def Measure(image_path):
         image = cv2.imread(image_path)
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        blur = cv2.GaussianBlur(gray, (9,9), 100)
+        blur = cv2.GaussianBlur(gray, (5,5),0)
         thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
         x,y,w,h = cv2.boundingRect(thresh)  # get cordinates for object
         cv2.rectangle(image, (x, y), (x + w, y + h), (36,255,12), 2) #Draw Box Around Object
@@ -195,9 +195,9 @@ def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and
         StartScan(Home_path,'Image')
         with Image.open(r'C:\Users\denni\Desktop\Image.png') as img:
             width,height= img.size
-            image_c=img.crop((0,0,width-5,height-5))
-            image_T = image_c.resize((round(image_c.width/4), round(image_c.height/4)), Image.ANTIALIAS)#Resizing Image to Fit in CV2
-            image_T.save(Home_path+'\ResizedImage.png')
+            image_c=img.crop((10,10,width-5,height-5)) #Croping image fro better results
+            image_T = image_c.resize((round(image_c.width/4), round(image_c.height/4)), Image.ANTIALIAS) #Resizing Image to Fit in CV2
+            image_T.save(Home_path+'\ResizedImage.png') #saving resized Image
         Measure(Home_path+'\ResizedImage.png')
         os.remove(Home_path+'\ResizedImage.png')
         print("Image Saved On Desktop.")
