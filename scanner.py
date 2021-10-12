@@ -194,7 +194,7 @@ def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and
         StartScan(Home_path,'Image')
         with Image.open(r'C:\Users\denni\Desktop\Image.png') as img:
             image = img.resize((round(img.width/4), round(img.height/4)), Image.ANTIALIAS) #Resizing Image to Fit in CV2
-            img.save(Home_path+'\ResizedImage.png')
+            image.save(Home_path+'\ResizedImage.png')
         Measure(Home_path+'\ResizedImage.png')
         os.remove(Home_path+'\ResizedImage.png')
     else:
