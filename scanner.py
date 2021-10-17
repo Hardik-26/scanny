@@ -29,7 +29,15 @@ _=False #To check if scanner is calibrated or not
 #|----------------------------------------------------------------
 
 #|==============================================================================================
+
 # CALIBRATE SCANNER------------------------------------------
+''' To get the pixel size in cm so that we can scan any object
+    and measure it's dimensions (Height & Width).
+    Brief description of algo:
+    1. scan a temp image, get its size and DPI.
+    2. Let DPI be 100 therefore 100 pixels per inch or 100 pixels per 2.57 cm.
+    3. do basic calculations to get the size of one pixel in cm.'''
+
 def Calibrate():
     def start():
         global _
@@ -43,7 +51,7 @@ def Calibrate():
         StartScan(path,'TEMP')
         # Read Image-------
         with Image.open("TEMP.png") as img:
-            dpi=round((img.info['dpi'])[1])
+            dpi=round((img.info['dpi'])[1]) # Get DPI of the Image
         global pixel_len
         pixel_len=2.54/dpi  #Length of one pixel in cm
         #os.remove('TEMP.png')
@@ -62,9 +70,12 @@ def Calibrate():
 #|==============================================================================================
 
 # Start Scanning-----------------------------------------------------------------------------------------
+'''To initiate the scan process, This funtion when called will-
+1. create a Powershell script to communicate with the flatbed scanner using WIA
+2. execute the PS script.
+3. save the image in the given location.'''
 
 def StartScan(Path,ImageName):
-
     # IMPORTS------------------
     import subprocess
     import os
@@ -124,7 +135,12 @@ $image.SaveFile("'''+ str(Path)+'\\'+str(ImageName)+'.png'+'"'+')'
 
 #|==============================================================================================
 
-# Get size of the scanner bed----------------------------
+# Get size of the scanner bed----------------------------------------------------
+''' This process will get the size of the flatbed scanner in pixels and in cm.
+Algo:
+1. scan a Temp image using the StartScan funtion.
+2. get the image size in pixels.
+3. if the scanner has been calibrated then give size in cm also.'''
 
 def size():
     # IMPORTS------------------
@@ -149,6 +165,9 @@ def size():
 #|==============================================================================================
 
 # Get mesurements of scanned objects--------------------------
+''' This funtion will read a image for objects draw a square around it
+    and get the dimentions of the object in cm.
+    This will be done using the help of Open-CV.'''
 
 def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and mesure that.'):
     Temp = None # Refrencing Temp Becaues why not.
@@ -173,7 +192,7 @@ def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and
     def Measure(image_path):
         image = cv2.imread(image_path)
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        blur = cv2.GaussianBlur(gray, (5,5),0)
+        blur = cv2.GaussianBlur(gray, (5,5), 0)
         thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
         x,y,w,h = cv2.boundingRect(thresh)  # get cordinates for object
         cv2.rectangle(image, (x, y), (x + w, y + h), (36,255,12), 2) #Draw Box Around Object
@@ -195,9 +214,9 @@ def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and
         StartScan(Home_path,'Image')
         with Image.open(r'C:\Users\denni\Desktop\Image.png') as img:
             width,height= img.size
-            image_c=img.crop((10,10,width-5,height-5)) #Croping image fro better results
-            image_T = image_c.resize((round(image_c.width/4), round(image_c.height/4)), Image.ANTIALIAS) #Resizing Image to Fit in CV2
-            image_T.save(Home_path+'\ResizedImage.png') #saving resized Image
+            image_c=img.crop((10,10,width-10,height-10))
+            image_T = image_c.resize((round(image_c.width/4), round(image_c.height/4)), Image.ANTIALIAS)#Resizing Image to Fit in CV2
+            image_T.save(Home_path+'\ResizedImage.png')
         Measure(Home_path+'\ResizedImage.png')
         os.remove(Home_path+'\ResizedImage.png')
         print("Image Saved On Desktop.")
