@@ -169,7 +169,7 @@ def size():
     and get the dimentions of the object in cm.
     This will be done using the help of Open-CV.'''
 
-def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and mesure that.'):
+def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and measure that.'):
     Temp = None # Refrencing Temp Becaues why not.
     if _==False:    #To check if scanner is calibrated or not
         print(' You need to calibrate your scanner for this process')
