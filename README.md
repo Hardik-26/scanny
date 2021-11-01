@@ -2,11 +2,13 @@
 
 
 --------------------------------------------------------------------------------------------------- 
-   #### Module for Python. This Module will enable a user to use any flatbed scanner using python.
+   ### Module for Python. This Module will enable a user to use any flatbed scanner using python.
 
 --------------------------------------------------------------------------------------------------- 
 
+#### LATEST UPDATE : Improved MeasureObject funtion (Now it can measure multiple objects at once). 
 
+---------------------------------------------------------------------------------------------------
 With this module you will be able to use your flatbed scanner using python.                       
 This module uses PowerShell script to execute the scan command.                          
 you can say that this module works as an API for Powershell. 
