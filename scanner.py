@@ -169,6 +169,117 @@ def size():
     and get the dimentions of the object in cm.
     This will be done using the help of Open-CV.'''
 
+def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and measure that.'):
+    Temp = None # Refrencing Temp Becaues why not.
+    if _==False:    #To check if scanner is calibrated or not
+        print(' You need to calibrate your scanner for this process')
+        raise SystemError(' Use "scanner.Calibarate()" to calibrate Scanner')
+    else:
+        pass
+    
+# IMPORTS--------------------------------------------------------------------------------------------------
+    import os
+    import numpy as np
+    from PIL import Image
+    try:
+        import cv2
+    except ModuleNotFoundError as error:
+        print(' This Process Requires Open-cv2.')
+        print(' Please Install Open-cv2 -> "pip install opencv-python"')
+        print(error)
+#-------------------------------------------------------------------------------------------------------------
+    Home_path=os.environ["HOMEPATH"]+'\Desktop' # Get HomePath of User
+    def Measure(image_path):
+        ''' A funtion to get object contours from the image.
+            Acknowledgement : PyImageSearch ; https://www.pyimagesearch.com'''
+        
+        image = cv2.imread(image_path)
+        sw,sh,_=image.shape()
+        if sw>1000 or sh>1000: #If image is too big then resize it.
+            Temp=True #To check If image will be resized or not
+            with Image.open(image_path) as img:
+                width,height= img.size
+                image_T = image_c.resize((round(image_c.width/4), round(image_c.height/4)), Image.ANTIALIAS)#Resizing Image to Fit in CV2
+                image_T.save(Home_path+'\ResizedImage.png')
+            Measure(Home_path+'\ResizedImage.png')
+            os.remove(Home_path+'\ResizedImage.png')
+        else:
+            pass
+        
+        def grab_contours(cnts):
+            # if the length the contours tuple returned by cv2.findContours
+            # is '2' then we are using either OpenCV v2.4, v4-beta, or
+            # v4-official
+            if len(cnts) == 2:
+                cnts = cnts[0]
+            # if the length of the contours tuple is '3' then we are using
+            # either OpenCV v3, v4-pre, or v4-alpha
+            elif len(cnts) == 3:
+                cnts = cnts[1]
+            # otherwise OpenCV has changed their cv2.findContours return
+            # signature yet again and I have no idea WTH is going on
+            else:
+                raise Exception(("Contours tuple must have length 2 or 3, "
+                    "otherwise OpenCV changed their cv2.findContours return "
+                    "signature yet again. Refer to OpenCV's documentation "
+                    "in that case"))
+            # return the actual contours array
+            return cnts
+    #-------------------------------------------------------------------------------
+        # load the image, convert it to grayscale, and blur it slightly
+        image = cv2.imread(image_path)
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        gray = cv2.GaussianBlur(gray, (7, 7), 0)
+        # perform edge detection, then perform a dilation + erosion to
+        # close gaps in between object edges
+        edged = cv2.Canny(gray, 50, 100)
+        edged = cv2.dilate(edged, None, iterations=1)
+        edged = cv2.erode(edged, None, iterations=1)
+        # find contours in the edge map
+        cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        cnts = grab_contours(cnts)
+        # loop over the contours individually
+        for c in cnts:
+                # if the contour is not sufficiently large, ignore it
+                if cv2.contourArea(c) < 100:
+                        continue
+                box = cv2.minAreaRect(c)
+                box = cv2.boxPoints(box)
+                cv2.drawContours(image, [box.astype("int")], -1, (0, 255, 0), 2)
+                __,_,w,h = cv2.boundingRect(c)
+                for (x, y) in box:
+                        cv2.circle(image, (int(x), int(y)), 2, (0, 0, 255), -1)
+                cord=list(box[0].astype("int"))
+        width=w*pixel_len #Converting pixels to cm
+        height=h*pixel_len #Converting pixels to cm
+        if Temp==True: #checking If image was resized or not
+            cv2.putText(image, "Width={}cm,Height={}cm".format(round(width,1)*4,round(height,1)*4), #if image resized then w*4 & h*4
+                          (round(w/2)-50,y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,0), 2)
+        else:
+            cv2.putText(image, "Width={}cm,Height={}cm".format(round(width,2),round(height,2)),
+                              (round(w/2)-50,y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,0), 2)
+        cv2.imshow("image", image)
+        cv2.waitKey(0)
+        return image
+#---------------------------------------------------------------------------
+    if ImagePath=='':       #To check if to scan or not
+        Temp = True #To checking If image was resized or not
+        StartScan(Home_path,'Image')
+        with Image.open(Home_path+'\Image.png') as img:
+            width,height= img.size
+            image_c=img.crop((10,10,width-10,height-10))
+            image_T = image_c.resize((round(image_c.width/4), round(image_c.height/4)), Image.ANTIALIAS)#Resizing Image to Fit in CV2
+            image_T.save(Home_path+'\ResizedImage.png')
+        Measure(Home_path+'\ResizedImage.png')
+        os.remove(Home_path+'\ResizedImage.png')
+        print("Image Saved On Desktop.")
+        print("Image Location: ",Home_path+'\Image.png')
+    else:
+            if os.path.exists(ImagePath)==False:
+                raise OSError(" Path Not Found / Path Does Not Exist ")
+            else:
+                Measure(ImagePath)
+
 
 #|================================================================================================================================================================================
 # TO BE CONTINUED...☺
