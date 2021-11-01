@@ -212,7 +212,7 @@ def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and
     if ImagePath=='':       #To check if to scan or not
         Temp = True #To checking If image was resized or not
         StartScan(Home_path,'Image')
-        with Image.open(r'C:\Users\denni\Desktop\Image.png') as img:
+        with Image.open(Home_path+'\Image.png') as img:
             width,height= img.size
             image_c=img.crop((10,10,width-10,height-10))
             image_T = image_c.resize((round(image_c.width/4), round(image_c.height/4)), Image.ANTIALIAS)#Resizing Image to Fit in CV2
