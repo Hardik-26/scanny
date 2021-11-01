@@ -169,62 +169,6 @@ def size():
     and get the dimentions of the object in cm.
     This will be done using the help of Open-CV.'''
 
-def MeasureObject(ImagePath='',__='Leave ImagePath empty to scan a new image and measure that.'):
-    Temp = None # Refrencing Temp Becaues why not.
-    if _==False:    #To check if scanner is calibrated or not
-        print(' You need to calibrate your scanner for this process')
-        raise SystemError(' Use "scanner.Calibarate()" to calibrate Scanner')
-    else:
-        pass
-    
-# IMPORTS--------------------------------------------------------------------------------------------------
-    import os
-    import numpy as np
-    from PIL import Image
-    try:
-        import cv2
-    except ModuleNotFoundError as error:
-        print(' This Process Requires Open-cv2.')
-        print(' Please Install Open-cv2 -> "pip install opencv-python"')
-        print(error)
-#-------------------------------------------------------------------------------------------------------------
-    Home_path=os.environ["HOMEPATH"]+'\Desktop' # Get HomePath of User
-    def Measure(image_path):
-        image = cv2.imread(image_path)
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        blur = cv2.GaussianBlur(gray, (5,5), 0)
-        thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
-        x,y,w,h = cv2.boundingRect(thresh)  # get cordinates for object
-        cv2.rectangle(image, (x, y), (x + w, y + h), (36,255,12), 2) #Draw Box Around Object
-        width=w*pixel_len #Converting pixels to cm
-        height=h*pixel_len #Converting pixels to cm
-        if Temp==True: #checking If image was resized or not
-            cv2.putText(image, "Width={}cm,Height={}cm".format(round(width,1)*4,round(height,1)*4), #if image resized then w*4 & h*4
-                          (round(w/2)-50,y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,0), 2)
-        else:
-            cv2.putText(image, "Width={}cm,Height={}cm".format(round(width,2),round(height,2)),
-                              (round(w/2)-50,y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,0), 2)
-        cv2.imshow("image", image)
-        cv2.waitKey(0)
-        return image
-#-------------------------------------------------------------------------------------------------------------
 
-    if ImagePath=='':       #To check if to scan or not
-        Temp = True #To checking If image was resized or not
-        StartScan(Home_path,'Image')
-        with Image.open(Home_path+'\Image.png') as img:
-            width,height= img.size
-            image_c=img.crop((10,10,width-10,height-10))
-            image_T = image_c.resize((round(image_c.width/4), round(image_c.height/4)), Image.ANTIALIAS)#Resizing Image to Fit in CV2
-            image_T.save(Home_path+'\ResizedImage.png')
-        Measure(Home_path+'\ResizedImage.png')
-        os.remove(Home_path+'\ResizedImage.png')
-        print("Image Saved On Desktop.")
-        print("Image Location: ",Home_path+'\Image.png')
-    else:
-            if os.path.exists(ImagePath)==False:
-                raise OSError(" Path Not Found / Path Does Not Exist ")
-            else:
-                Measure(ImagePath)
 #|================================================================================================================================================================================
 # TO BE CONTINUED...☺
