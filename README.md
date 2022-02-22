@@ -21,7 +21,7 @@
 ### Brief Description :
 With this module you will be able to use your flatbed scanner using python.<br>
 This module uses PowerShell script to execute the scan command.<br>
-you can say that this module works as an API for Powershell which can comunicate with the scanner using WIA (Windows Image Acquisition).<br>
+you can say that this module works as an API for Powershell which can communicate with the scanner using WIA (Windows Image Acquisition).<br>
 
 
 --------------------------------------------------------------------------------------------------- 
