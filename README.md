@@ -1,5 +1,6 @@
-# Flatbed-Scanner
-### Version : 0.0.1
+# Scanny
+
+[![PyPI version](https://badge.fury.io/py/scanny.svg)](https://badge.fury.io/py/scanny)
 
 --------------------------------------------------------------------------------------------------- 
 
