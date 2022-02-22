@@ -1,0 +1,10 @@
+LICENSE.txt
+README.md
+pyproject.toml
+setup.cfg
+src/scanny/__init__.py
+src/scanny/scanny.py
+src/scanny.egg-info/PKG-INFO
+src/scanny.egg-info/SOURCES.txt
+src/scanny.egg-info/dependency_links.txt
+src/scanny.egg-info/top_level.txt
