@@ -1,6 +1,7 @@
 # Scanny
 
 [![PyPI version](https://badge.fury.io/py/scanny.svg)](https://badge.fury.io/py/scanny)
+[![License](https://img.shields.io/badge/License-GNU%20General%20Public%20License%20v3.0-blue)](LICENSE)
 
 --------------------------------------------------------------------------------------------------- 
 
