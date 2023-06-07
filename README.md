@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/scanny.svg)](https://badge.fury.io/py/scanny)
 [![License](https://img.shields.io/badge/License-GNU%20General%20Public%20License%20v3.0-blue)](LICENSE)
-[![Downloads](https://static.pepy.tech/personalized-badge/scanny?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=Total%20Downloads)](https://pepy.tech/project/scanny)
+[![Downloads](https://static.pepy.tech/personalized-badge/scanny?period=total&units=none&left_color=grey&right_color=brightgreen&left_text=Total%20Downloads)](https://pepy.tech/project/scanny)
 
 --------------------------------------------------------------------------------------------------- 
 
