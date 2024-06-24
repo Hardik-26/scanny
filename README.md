@@ -6,9 +6,9 @@
 
 --------------------------------------------------------------------------------------------------- 
 
-   ### Module for Python. This Module will enable a user to use any flatbed scanner using python.
+   ### Module for Python. This Module will enable a user to use any flatbed scanner using Python.
 
---------------------------------------------------------------------------------------------------- 
+---------------------------------------------------------------------------------------------------  
 
 
 ### Copyright (c) 2024 Hardik Shah.
@@ -16,19 +16,19 @@
 
 --------------------------------------------------------------------------------------------------- 
 ### Author : Hardik Shah.
-### License : GNU General Public License v3.0
+### License: GNU General Public License v3.0
 
 --------------------------------------------------------------------------------------------------- 
 ### Brief Description :
-With this module you will be able to use your flatbed scanner using python.<br>
-This module uses PowerShell script to execute the scan command.<br>
+With this module, you can use your flatbed scanner using Python.<br>
+This module uses a PowerShell script to execute the scan command.<br>
 you can say that this module works as an API for Powershell which can communicate with the scanner using WIA (Windows Image Acquisition).<br>
 
 
 --------------------------------------------------------------------------------------------------- 
 ### INSTRUCTIONS-
-Make sure your flatbed scanner is pluged in and ready to scan <br>
-well thats it.
+Make sure your flatbed scanner is plugged in and ready to scan <br>
+well, that's it.
 
 ---------------------------------------------------------------------------------------------------
 ## HOW TO USE-
@@ -59,8 +59,8 @@ Eg- scanny.StartScan('C:\\Users\\Admin\\Desktop','TestIamge')
 ```
 ---------------------------------------------------------------------------------------------------
 ### Other Information-
-> Currently this python package only works for Windows 8 & Above. <br>
-> Linux and MAC-OS compatibility comming soon in next version: 0.0.2. <br>
+> Currently this Python package only works for Windows 8 & Above. <br>
+> Linux and MAC-OS compatibility is coming soon in the next version: 0.0.2. <br>
 
 ---------------------------------------------------------------------------------------------------
 
